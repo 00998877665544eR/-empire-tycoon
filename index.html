@@ -3,50 +3,1478 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Empire Tycoon v0.2</title>
+<title>Empire Tycoon — Complete Edition</title>
+
 <style>
-*{box-sizing:border-box}body{margin:0;background:#0b1116;color:#f2f5f7;font-family:Arial,sans-serif}
-#app{max-width:1000px;margin:auto;min-height:100vh;background:#1a292f}
-.top{position:sticky;top:0;z-index:5;padding:15px;background:#0c1419;border-bottom:1px solid #394a52;display:flex;justify-content:space-between}
-.brand{font-size:22px;font-weight:bold}.money{font-size:20px;font-weight:bold;color:#f4c95d}
-main{padding:14px}.hero{height:200px;position:relative;overflow:hidden;border-radius:18px;border:1px solid #62737b;background:linear-gradient(#64879a 0 48%,#68735d 49% 70%,#303b40 71%)}
-.sun{position:absolute;right:40px;top:25px;width:55px;height:55px;border-radius:50%;background:#ffe7a0;box-shadow:0 0 35px #fff0a055}
-.hill{position:absolute;bottom:48px;left:-5%;width:110%;height:70px;background:#435248;border-radius:50% 50% 0 0}
-.road{position:absolute;bottom:0;width:100%;height:50px;background:#30383b}.road:after{content:"";position:absolute;top:23px;width:100%;height:4px;background:repeating-linear-gradient(90deg,#e8dc8b 0 38px,transparent 38px 72px)}
-.factory{position:absolute;bottom:38px;left:35px;width:165px;height:85px;background:linear-gradient(90deg,#596970,#9ca8aa);border:2px solid #35434a;box-shadow:8px 10px 18px #0007}
-.factory:before{content:"";position:absolute;left:-5px;top:-28px;border-left:85px solid transparent;border-right:85px solid transparent;border-bottom:28px solid #48565c}
-.factory:after{content:"";position:absolute;left:15px;top:27px;width:18px;height:20px;background:#c1eaf1;box-shadow:30px 0 #c1eaf1,60px 0 #c1eaf1,90px 0 #c1eaf1}
-.chimney{position:absolute;left:140px;bottom:115px;width:18px;height:65px;background:#5d6264;border:2px solid #394144}
-.smoke{position:absolute;left:135px;bottom:170px;width:70px;height:45px;background:radial-gradient(circle,#eee8 0 18%,transparent 55%);filter:blur(5px)}
-.heroText{position:absolute;top:14px;left:16px;font-weight:bold}.status{position:absolute;right:14px;bottom:12px;background:#10181dcc;padding:8px;border-radius:9px;font-weight:bold}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}.stat{padding:12px;text-align:center;border-radius:14px;background:linear-gradient(145deg,#3c5059,#293940);border:1px solid #596d76}.stat small{display:block;color:#bdc8cd}.stat b{font-size:20px}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}button{border:0;border-radius:12px;padding:13px;font-weight:bold;cursor:pointer;background:linear-gradient(#80c8fa,#58a9df);color:#07141b}
-.title{font-size:18px;font-weight:bold;margin:16px 2px 9px}.map{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
-.plot{min-height:145px;padding:9px;border-radius:15px;border:2px solid #617984;background:linear-gradient(150deg,#4c636d,#31434b)}.locked{background:linear-gradient(150deg,#42555d,#303f46)}
-.mini{height:52px;width:78px;margin:3px auto 8px;position:relative;background:linear-gradient(90deg,#687b82,#aab4b6);border:2px solid #39484d}.mini:before{content:"";position:absolute;left:5px;top:-13px;border-left:34px solid transparent;border-right:34px solid transparent;border-bottom:13px solid #4a585d}.mini:after{content:"";position:absolute;left:8px;top:18px;width:10px;height:13px;background:#c8edf3;box-shadow:18px 0 #c8edf3,36px 0 #c8edf3}
-.plot h3{margin:0;font-size:15px}.plot p{margin:5px 0;font-size:12px}.level{color:#f4c95d}.plot button{width:100%;padding:9px;font-size:13px}
-.log{height:125px;overflow:auto;margin-top:12px;padding:10px;background:#0d171c;border:1px solid #304149;border-radius:14px;font-size:13px}
-@media(max-width:600px){.actions{grid-template-columns:1fr}.plot{min-height:145px}.plot h3{font-size:14px}}
+*{box-sizing:border-box}
+
+:root{
+--bg:#0b1115;
+--panel:#172126;
+--panel2:#202d33;
+--line:#41525b;
+--text:#f1f4f5;
+--muted:#a9b4b9;
+--blue:#69b9eb;
+--gold:#e5b75e;
+--green:#67b873;
+--red:#d56f63
+}
+
+html,body{
+margin:0;
+min-height:100%;
+background:#080d10;
+color:var(--text);
+font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif
+}
+
+body{
+background:
+radial-gradient(ellipse at 50% -20%,#3c4d55 0,#172126 38%,#080d10 82%);
+background-attachment:fixed
+}
+
+button{font:inherit}
+
+#game{
+max-width:1100px;
+margin:auto;
+min-height:100vh;
+background:linear-gradient(#111a1f,#0d1418);
+box-shadow:0 0 80px #0009
+}
+
+.top{
+position:sticky;
+top:0;
+z-index:20;
+background:linear-gradient(180deg,#182329,#0f171b);
+border-bottom:1px solid #4a5960;
+padding:12px 16px
+}
+
+.topline{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:12px
+}
+
+.logo{
+font-size:20px;
+font-weight:900
+}
+
+.cash{
+font-size:21px;
+font-weight:900;
+color:#fff
+}
+
+.sub{
+font-size:12px;
+color:var(--muted);
+margin-top:4px
+}
+
+nav{
+display:flex;
+gap:7px;
+overflow:auto;
+margin-top:12px;
+padding-bottom:2px
+}
+
+nav button{
+white-space:nowrap;
+border:1px solid #4a5a62;
+background:#202c32;
+color:#dce3e6;
+border-radius:9px;
+padding:9px 13px;
+font-weight:750
+}
+
+nav button.active{
+background:#6db9e8;
+color:#10202a;
+border-color:#94d2f4
+}
+
+main{
+padding:14px
+}
+
+.view{
+display:none
+}
+
+.view.active{
+display:block
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:9px
+}
+
+.stat{
+border:1px solid #50636c;
+border-radius:14px;
+padding:13px;
+background:linear-gradient(145deg,#34464e,#25343a);
+box-shadow:inset 0 1px #fff2,0 7px 20px #0004
+}
+
+.stat .k{
+font-size:12px;
+color:#c3cdd1
+}
+
+.stat .v{
+font-size:21px;
+font-weight:900;
+margin-top:8px
+}
+
+.card{
+border:1px solid #43545c;
+border-radius:15px;
+background:linear-gradient(145deg,#1f2c32,#172126);
+box-shadow:inset 0 1px #ffffff10,0 8px 25px #0004;
+padding:15px;
+margin-top:12px
+}
+
+.card h2{
+font-size:18px;
+margin:0 0 12px
+}
+
+.muted{
+color:var(--muted)
+}
+
+.actions{
+display:flex;
+gap:8px;
+flex-wrap:wrap
+}
+
+.btn{
+border:1px solid #89c9ed;
+background:linear-gradient(#91cef0,#5fa9d9);
+color:#10202a;
+border-radius:10px;
+padding:11px 14px;
+font-weight:850;
+box-shadow:0 3px 8px #0005
+}
+
+.btn:disabled{
+opacity:.4
+}
+
+.btn.alt{
+background:linear-gradient(#7cc483,#4f9e5b);
+border-color:#8bd294
+}
+
+.btn.dark{
+background:#26353b;
+color:#eef3f5;
+border-color:#596b74
+}
+
+/* ŞEHİR */
+
+.city{
+position:relative;
+height:420px;
+border-radius:16px;
+overflow:hidden;
+border:1px solid #52666e;
+
+background:
+linear-gradient(165deg,transparent 0 45%,#ffffff09 45% 46%,transparent 46%),
+linear-gradient(25deg,transparent 0 55%,#0005 55% 57%,transparent 57%),
+radial-gradient(circle at 76% 18%,#d9e7ed55 0 2px,transparent 3px),
+linear-gradient(180deg,#60757d 0,#8b9b9c 30%,#586b69 31%,#34463e 100%);
+
+box-shadow:inset 0 0 80px #0007
+}
+
+.city:before,
+.city:after{
+content:"";
+position:absolute;
+background:#25323888;
+transform:rotate(-18deg);
+width:140%;
+height:30px;
+left:-20%;
+top:48%
+}
+
+.city:after{
+transform:rotate(20deg);
+top:69%;
+background:#202b3088
+}
+
+.sun{
+position:absolute;
+width:80px;
+height:80px;
+border-radius:50%;
+right:40px;
+top:25px;
+background:#fff4c4;
+filter:blur(1px);
+box-shadow:0 0 35px #fff8
+}
+
+.building{
+position:absolute;
+bottom:74px;
+width:50px;
+border:1px solid #263136;
+background:linear-gradient(90deg,#313b3e,#667275 48%,#252e31);
+box-shadow:4px 5px 10px #0008
+}
+
+.building:after{
+content:"";
+position:absolute;
+inset:9px;
+background:
+repeating-linear-gradient(
+90deg,
+#d8c68c 0 7px,
+transparent 7px 14px
+);
+opacity:.55
+}
+
+.b1{
+height:115px;
+left:7%
+}
+
+.b2{
+height:165px;
+left:17%;
+width:62px
+}
+
+.b3{
+height:92px;
+left:30%;
+width:75px
+}
+
+.b4{
+height:135px;
+left:72%;
+width:62px
+}
+
+.b5{
+height:105px;
+left:84%;
+width:48px
+}
+
+.road{
+position:absolute;
+bottom:0;
+left:0;
+right:0;
+height:75px;
+background:#252d30;
+border-top:2px solid #718080;
+transform:skewY(-3deg)
+}
+
+.road i{
+position:absolute;
+top:35px;
+width:65px;
+border-top:3px dashed #c4a957
+}
+
+.r1{left:8%}
+.r2{left:28%}
+.r3{left:48%}
+.r4{left:68%}
+.r5{left:88%}
+
+.factory3d{
+position:absolute;
+bottom:66px;
+left:42%;
+width:175px;
+height:115px;
+background:linear-gradient(145deg,#a0a9aa,#59666a 45%,#303b3f);
+border:2px solid #293236;
+border-radius:7px;
+box-shadow:10px 13px 18px #0009
+}
+
+.factory3d:before{
+content:"";
+position:absolute;
+left:20px;
+right:20px;
+top:22px;
+height:55px;
+background:
+repeating-linear-gradient(
+90deg,
+#3f4a4e 0 25px,
+#a4adb0 25px 27px
+);
+box-shadow:inset 0 8px #fff2
+}
+
+.chimney{
+position:absolute;
+width:18px;
+height:72px;
+background:linear-gradient(90deg,#3c4548,#889092,#30383a);
+top:-54px;
+border-radius:2px
+}
+
+.c1{
+left:35px
+}
+
+.c2{
+left:70px;
+height:85px;
+top:-67px
+}
+
+.smoke{
+position:absolute;
+width:26px;
+height:26px;
+border-radius:50%;
+background:#cfd6d655;
+top:-83px;
+left:67px;
+filter:blur(3px);
+box-shadow:
+18px -12px 0 3px #d9dddd33,
+30px 2px 0 1px #d9dddd22
+}
+
+.citylabel{
+position:absolute;
+left:14px;
+top:14px;
+background:#10191dcc;
+border:1px solid #ffffff20;
+border-radius:10px;
+padding:9px 11px;
+font-weight:800
+}
+
+/* FABRİKALAR */
+
+.plotgrid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px
+}
+
+.plot{
+position:relative;
+min-height:210px;
+border:1px solid #637781;
+border-radius:15px;
+overflow:hidden;
+padding:12px;
+background:linear-gradient(145deg,#40545d,#29383e);
+box-shadow:inset 0 1px #fff2,0 8px 18px #0005
+}
+
+.plot.factory{
+background:linear-gradient(145deg,#735548,#4b3831);
+border-color:#b58b79
+}
+
+.plot .art{
+height:70px;
+border-radius:10px;
+background:linear-gradient(180deg,#89969a,#4e5a5e);
+position:relative;
+margin-bottom:9px;
+box-shadow:
+inset 0 10px #fff2,
+inset 0 -12px #0005
+}
+
+.plot .art:before{
+content:"";
+position:absolute;
+left:15%;
+right:15%;
+bottom:10px;
+height:33px;
+background:
+repeating-linear-gradient(
+90deg,
+#303a3e 0 18px,
+#697477 18px 20px
+)
+}
+
+.plot h3{
+margin:0 0 5px
+}
+
+.plot p{
+margin:4px 0;
+color:#e4e9ea
+}
+
+.plot .small{
+font-size:12px;
+color:#bfc9cd
+}
+
+.buy{
+position:absolute;
+bottom:11px;
+left:11px;
+right:11px
+}
+
+/* ÜRETİM */
+
+.progress{
+height:8px;
+background:#0b1114;
+border-radius:99px;
+overflow:hidden;
+border:1px solid #334249;
+margin:8px 0
+}
+
+.progress i{
+display:block;
+height:100%;
+background:linear-gradient(90deg,#65b8e8,#8bd1f2);
+width:0
+}
+
+/* TABLOLAR */
+
+.table{
+width:100%;
+border-collapse:collapse
+}
+
+.table td,
+.table th{
+padding:9px;
+border-bottom:1px solid #ffffff12;
+text-align:left
+}
+
+.table th{
+color:#bfc9cd;
+font-size:12px
+}
+
+/* LOG */
+
+.log{
+height:145px;
+overflow:auto;
+background:#0a1013;
+border:1px solid #334148;
+border-radius:11px;
+padding:10px;
+font-size:12px;
+line-height:1.55
+}
+
+.log div{
+border-bottom:1px solid #ffffff0a;
+padding:2px 0
+}
+
+/* GÖREV */
+
+.mission{
+display:flex;
+justify-content:space-between;
+gap:12px;
+align-items:center;
+border:1px solid #43545b;
+border-radius:11px;
+padding:11px;
+margin:8px 0;
+background:#1a262b
+}
+
+.mission b{
+display:block
+}
+
+.tag{
+font-size:11px;
+color:#d8e0e3
+}
+
+/* MOBİL */
+
+@media(max-width:700px){
+
+.stats{
+grid-template-columns:repeat(2,1fr)
+}
+
+.plotgrid{
+grid-template-columns:repeat(2,1fr)
+}
+
+.city{
+height:360px
+}
+
+.factory3d{
+left:35%;
+transform:scale(.85);
+transform-origin:bottom left
+}
+
+}
+
+@media(max-width:430px){
+
+main{
+padding:10px
+}
+
+.plotgrid{
+grid-template-columns:1fr 1fr;
+gap:7px
+}
+
+.plot{
+min-height:205px;
+padding:10px
+}
+
+.plot h3{
+font-size:15px
+}
+
+.city{
+height:330px
+}
+
+.building{
+transform:scale(.8);
+transform-origin:bottom
+}
+
+.factory3d{
+left:28%;
+transform:scale(.68);
+transform-origin:bottom left
+}
+
+.stats .v{
+font-size:18px
+}
+
+}
 </style>
 </head>
-<body><div id="app">
-<header class="top"><div class="brand">🏭 Empire Tycoon</div><div class="money" id="money">₺71.000</div></header>
+
+<body>
+
+<div id="game">
+
+<header class="top">
+
+<div class="topline">
+
+<div>
+
+<div class="logo">
+🏭 Empire Tycoon
+</div>
+
+<div class="sub" id="status">
+Üretim hattı çalışıyor
+</div>
+
+</div>
+
+<div class="cash">
+₺<span id="money">100.000</span>
+</div>
+
+</div>
+
+<nav id="nav">
+
+<button class="active" data-view="city">
+🏙️ Şehir
+</button>
+
+<button data-view="factory">
+🏭 Fabrikalar
+</button>
+
+<button data-view="market">
+📦 Pazar
+</button>
+
+<button data-view="finance">
+💰 Finans
+</button>
+
+<button data-view="missions">
+🏆 Görevler
+</button>
+
+</nav>
+
+</header>
+
 <main>
-<section class="hero"><div class="sun"></div><div class="hill"></div><div class="road"></div><div class="smoke"></div><div class="chimney"></div><div class="factory"></div><div class="heroText">Sanayi bölgesi • Gün 1</div><div class="status">🏭 Fabrika çalışıyor</div></section>
-<section class="stats"><div class="stat"><small>📦 Ürün</small><b id="products">0</b></div><div class="stat"><small>🏭 Fabrika</small><b id="factories">1</b></div><div class="stat"><small>📈 Gelir</small><b id="income">500/10 sn</b></div></section>
-<section class="actions"><button onclick="sell()">📦 Ürünleri Sat (+₺500)</button><button onclick="upgrade()">⬆️ Fabrikayı Geliştir (₺25.000)</button></section>
-<div class="title">🏗️ Şehirdeki arsalar</div><section class="map" id="map"></section>
-<div class="title">📜 Şirket günlüğü</div><section class="log" id="log"></section>
-</main></div>
+
+<!-- ŞEHİR -->
+
+<section id="city" class="view active">
+
+<div class="stats">
+
+<div class="stat">
+<div class="k">💵 Nakit</div>
+<div class="v">
+₺<span id="sMoney">100.000</span>
+</div>
+</div>
+
+<div class="stat">
+<div class="k">🏭 Fabrika</div>
+<div class="v" id="sFactories">1</div>
+</div>
+
+<div class="stat">
+<div class="k">📦 Stok</div>
+<div class="v" id="sStock">1</div>
+</div>
+
+<div class="stat">
+<div class="k">📈 / 10 sn</div>
+<div class="v">
+₺<span id="sIncome">500</span>
+</div>
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>🏙️ Şirket Merkezi</h2>
+
+<div class="city">
+
+<div class="sun"></div>
+
+<div class="citylabel">
+EMPIRE INDUSTRIES • BANDIRMA
+</div>
+
+<div class="building b1"></div>
+<div class="building b2"></div>
+<div class="building b3"></div>
+<div class="building b4"></div>
+<div class="building b5"></div>
+
+<div class="factory3d">
+
+<div class="chimney c1"></div>
+<div class="chimney c2"></div>
+<div class="smoke"></div>
+
+</div>
+
+<div class="road">
+
+<i class="r1"></i>
+<i class="r2"></i>
+<i class="r3"></i>
+<i class="r4"></i>
+<i class="r5"></i>
+
+</div>
+
+</div>
+
+<div class="actions" style="margin-top:12px">
+
+<button class="btn" onclick="sell()">
+📦 Stoktaki Ürünleri Sat
+</button>
+
+<button class="btn alt" onclick="collect()">
+💵 Geliri Topla
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- FABRİKALAR -->
+
+<section id="factory" class="view">
+
+<div class="card">
+
+<h2>🏭 Üretim Yönetimi</h2>
+
+<div class="actions">
+
+<button class="btn" onclick="upgrade()">
+⬆️ Fabrikayı Geliştir • ₺25.000
+</button>
+
+<button class="btn dark" onclick="build()">
+🏗️ Yeni Fabrika • ₺100.000
+</button>
+
+</div>
+
+<div class="progress">
+<i id="prodbar"></i>
+</div>
+
+<div class="muted" id="prodtext">
+Üretim hazırlanıyor…
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Arazi ve Fabrikalar</h2>
+
+<div class="plotgrid" id="plots"></div>
+
+</div>
+
+</section>
+
+
+<!-- PAZAR -->
+
+<section id="market" class="view">
+
+<div class="card">
+
+<h2>📦 Pazar</h2>
+
+<p class="muted">
+Ürün fiyatı piyasa koşullarına göre değişir.
+</p>
+
+<table class="table">
+
+<tr>
+<th>Ürün</th>
+<th>Stok</th>
+<th>Fiyat</th>
+<th></th>
+</tr>
+
+<tr>
+
+<td>
+🏭 Sanayi Ürünü
+</td>
+
+<td id="mStock">
+1
+</td>
+
+<td>
+₺<span id="price">500</span>
+</td>
+
+<td>
+<button class="btn" onclick="sell()">
+Sat
+</button>
+</td>
+
+</tr>
+
+</table>
+
+</div>
+
+
+<div class="card">
+
+<h2>📊 Piyasa</h2>
+
+<div class="stats">
+
+<div class="stat">
+
+<div class="k">
+Talep
+</div>
+
+<div class="v" id="demand">
+Yüksek
+</div>
+
+</div>
+
+<div class="stat">
+
+<div class="k">
+Trend
+</div>
+
+<div class="v" id="trend">
++4%
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- FİNANS -->
+
+<section id="finance" class="view">
+
+<div class="card">
+
+<h2>💰 Şirket Finansları</h2>
+
+<table class="table">
+
+<tr>
+<th>Kalem</th>
+<th>Değer</th>
+</tr>
+
+<tr>
+<td>Toplam satış</td>
+<td>₺<span id="sales">0</span></td>
+</tr>
+
+<tr>
+<td>Toplam üretim</td>
+<td id="production">0</td>
+</tr>
+
+<tr>
+<td>Fabrika seviyesi</td>
+<td id="level">1</td>
+</tr>
+
+<tr>
+<td>Şirket değeri</td>
+<td>₺<span id="value">100.000</span></td>
+</tr>
+
+</table>
+
+</div>
+
+
+<div class="card">
+
+<h2>📜 Son İşlemler</h2>
+
+<div class="log" id="log"></div>
+
+</div>
+
+</section>
+
+
+<!-- GÖREVLER -->
+
+<section id="missions" class="view">
+
+<div class="card">
+
+<h2>🏆 Şirket Hedefleri</h2>
+
+<div id="missions"></div>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+
 <script>
-let money=71000,products=0,factories=1,level=1,income=500,plots=[true,false,false,false,false,false,false,false,false];
-const prices=[0,50000,100000,150000,200000,250000,300000,350000,400000];
+
+const state = {
+
+money:100000,
+
+stock:1,
+
+factories:1,
+
+level:1,
+
+sales:0,
+
+production:0,
+
+owned:[
+true,
+false,
+false,
+false,
+false,
+false,
+false,
+false,
+false
+],
+
+price:500,
+
+missions:{
+sell:false,
+build:false,
+level:false
+}
+
+};
+
+
+const costs=[
+50000,
+100000,
+150000,
+200000,
+250000,
+300000,
+350000,
+400000
+];
+
+
 const $=id=>document.getElementById(id);
-function fmt(n){return "₺"+n.toLocaleString("tr-TR")}
-function log(t){$("log").insertAdjacentHTML("afterbegin","<div>• "+t+"</div>");if($("log").children.length>12)$("log").lastElementChild.remove()}
-function render(){ $("money").textContent=fmt(money);$("products").textContent=products;$("factories").textContent=factories;$("income").textContent=income+"/10 sn";let m=$("map");m.innerHTML="";plots.forEach((x,i)=>{let d=document.createElement("div");d.className="plot "+(x?"":"locked");if(x)d.innerHTML='<div class="mini"></div><h3>🏭 '+(i?"Fabrika "+(i+1):"Ana Fabrika")+'</h3><p><span class="level">Lv.'+level+'</span> • Üretim: '+Math.max(1,Math.floor(income/500))+'/10 sn</p><p>Arsa '+(i+1)+'</p>';else d.innerHTML='<h3>🔒 Boş Arsa</h3><p>Yeni yatırım alanı</p><p>Satın alma</p><button onclick="buyPlot('+i+')">'+fmt(prices[i])+'</button>';m.appendChild(d)})}
-function sell(){if(!products){log("Satılacak ürün yok.");return}products--;money+=500;log("1 ürün satıldı: +₺500");render()}
-function upgrade(){if(money<25000){log("Fabrika geliştirmek için yeterli para yok.");return}money-=25000;level++;income+=250;log("Fabrika geliştirildi. Gelir arttı.");render()}
-function buyPlot(i){if(money<prices[i]){log("Arsa için yeterli para yok.");return}money-=prices[i];plots[i]=true;factories++;income+=500;log("Yeni arsa satın alındı ve fabrika kuruldu.");render()}
-setInterval(()=>{products++;log("1 ürün üretildi.");render()},10000);render();log("Şirket kuruldu. Ana fabrika üretime başladı.");
-</script></body></html>
+
+const fmt=n=>Math.floor(n).toLocaleString("tr-TR");
+
+
+function save(){
+
+localStorage.setItem(
+"empireTycoonComplete",
+JSON.stringify(state)
+);
+
+}
+
+
+function load(){
+
+try{
+
+let x=JSON.parse(
+localStorage.getItem("empireTycoonComplete")
+);
+
+if(x)
+Object.assign(state,x);
+
+}catch(e){}
+
+}
+
+
+function log(t){
+
+$("log").innerHTML=
+"<div>• "+
+new Date().toLocaleTimeString("tr-TR")+
+" — "+
+t+
+"</div>"+
+$("log").innerHTML;
+
+}
+
+
+function render(){
+
+$("money").textContent=fmt(state.money);
+
+$("sMoney").textContent=fmt(state.money);
+
+$("sFactories").textContent=state.factories;
+
+$("sStock").textContent=state.stock;
+
+$("sIncome").textContent=
+fmt(state.factories*state.price);
+
+$("mStock").textContent=state.stock;
+
+$("price").textContent=fmt(state.price);
+
+$("sales").textContent=fmt(state.sales);
+
+$("production").textContent=
+fmt(state.production);
+
+$("level").textContent=state.level;
+
+$("value").textContent=
+fmt(
+100000+
+state.factories*50000+
+state.level*25000
+);
+
+$("demand").textContent=
+state.price>=520
+?"Yüksek"
+:
+state.price<=450
+?"Düşük"
+:
+"Normal";
+
+$("trend").textContent=
+(state.price>=500?"+":"")+
+Math.round((state.price-500)/5)+
+"%";
+
+$("status").textContent=
+state.stock>20
+?
+"Depolar doluyor • satış zamanı"
+:
+"Üretim hattı çalışıyor";
+
+renderPlots();
+
+renderMissions();
+
+save();
+
+}
+
+
+function sell(){
+
+if(!state.stock){
+
+log("Stokta ürün yok.");
+
+return;
+
+}
+
+let qty=Math.min(state.stock,10);
+
+let gain=qty*state.price;
+
+state.stock-=qty;
+
+state.money+=gain;
+
+state.sales+=gain;
+
+state.missions.sell=
+state.sales>=5000;
+
+log(
+qty+
+" ürün satıldı: +₺"+
+fmt(gain)
+);
+
+render();
+
+}
+
+
+function collect(){
+
+let gain=
+state.factories*
+state.price;
+
+state.money+=gain;
+
+state.sales+=gain;
+
+log(
+"Günlük işletme geliri: +₺"+
+fmt(gain)
+);
+
+render();
+
+}
+
+
+function upgrade(){
+
+if(state.money<25000){
+
+log(
+"Geliştirme için ₺25.000 gerekiyor."
+);
+
+return;
+
+}
+
+state.money-=25000;
+
+state.level++;
+
+state.price+=15;
+
+state.missions.level=
+state.level>=3;
+
+log(
+"Fabrika seviyesi "+
+state.level+
+" oldu."
+);
+
+render();
+
+}
+
+
+function build(){
+
+if(state.money<100000){
+
+log(
+"Yeni fabrika için ₺100.000 gerekiyor."
+);
+
+return;
+
+}
+
+let i=
+state.owned.findIndex(
+(x,n)=>n>0&&!x
+);
+
+if(i<0){
+
+log(
+"Tüm araziler açıldı."
+);
+
+return;
+
+}
+
+state.money-=100000;
+
+state.owned[i]=true;
+
+state.factories++;
+
+state.missions.build=
+state.factories>=3;
+
+log(
+"Yeni fabrika faaliyete geçti."
+);
+
+render();
+
+}
+
+
+function renderPlots(){
+
+let p=$("plots");
+
+p.innerHTML="";
+
+for(let i=0;i<9;i++){
+
+let d=document.createElement("div");
+
+d.className=
+"plot"+
+(i===0||state.owned[i]?" factory":"");
+
+
+if(i===0||state.owned[i]){
+
+d.innerHTML=`
+
+<div class="art"></div>
+
+<h3>
+🏭 Fabrika ${i+1}
+</h3>
+
+<p>
+Seviye ${state.level}
+</p>
+
+<p>
+Üretim:
+1/${Math.max(4,11-state.level)} sn
+</p>
+
+<p class="small">
+Aktif üretim tesisi
+</p>
+
+`;
+
+}else{
+
+d.innerHTML=`
+
+<div
+class="art"
+style="opacity:.35"
+></div>
+
+<h3>
+🔒 Kilitli Arsa
+</h3>
+
+<p>
+Satın alma
+</p>
+
+<button
+class="btn buy"
+onclick="buyPlot(${i})"
+>
+₺${fmt(costs[i-1])}
+</button>
+
+`;
+
+}
+
+p.appendChild(d);
+
+}
+
+}
+
+
+function buyPlot(i){
+
+let c=costs[i-1];
+
+if(state.money<c){
+
+log(
+"Bu arazi için yeterli para yok."
+);
+
+return;
+
+}
+
+state.money-=c;
+
+state.owned[i]=true;
+
+state.factories++;
+
+state.missions.build=
+state.factories>=3;
+
+log(
+"Yeni arsa satın alındı: ₺"+
+fmt(c)
+);
+
+render();
+
+}
+
+
+function renderMissions(){
+
+let a=[
+
+[
+"İlk Satış",
+"Toplam ₺5.000 satış yap",
+"sales"
+],
+
+[
+"Büyüyen Şirket",
+"3 fabrikaya ulaş",
+"build"
+],
+
+[
+"Üretim Uzmanı",
+"Fabrika seviyesini 3 yap",
+"level"
+]
+
+];
+
+
+$("missions").innerHTML=
+
+a.map(m=>{
+
+let done=
+state.missions[m[2]];
+
+return `
+
+<div class="mission">
+
+<div>
+
+<b>
+${done?"✅":"🎯"} ${m[0]}
+</b>
+
+<span class="tag">
+${m[1]}
+</span>
+
+</div>
+
+<strong>
+${done?"TAMAM":"DEVAM"}
+</strong>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+
+document
+.querySelectorAll("nav button")
+.forEach(b=>{
+
+b.onclick=()=>{
+
+document
+.querySelectorAll("nav button")
+.forEach(x=>
+x.classList.remove("active")
+);
+
+b.classList.add("active");
+
+document
+.querySelectorAll(".view")
+.forEach(x=>
+x.classList.remove("active")
+);
+
+$(b.dataset.view)
+.classList.add("active");
+
+};
+
+});
+
+
+load();
+
+render();
+
+log(
+"Empire Tycoon Complete Edition başlatıldı."
+);
+
+
+let timer=0;
+
+
+setInterval(()=>{
+
+timer++;
+
+let speed=
+Math.max(
+4,
+11-state.level
+);
+
+$("prodbar").style.width=
+(
+(timer%speed)/
+speed*
+100
+)+"%";
+
+$("prodtext").textContent=
+"Sonraki üretim: "+
+(
+speed-(timer%speed)
+)+
+" sn";
+
+
+if(timer%speed===0){
+
+state.stock+=state.factories;
+
+state.production+=state.factories;
+
+log(
+state.factories+
+" ürün üretildi."
+);
+
+render();
+
+}
+
+},1000);
+
+</script>
+
+</body>
+</html>
