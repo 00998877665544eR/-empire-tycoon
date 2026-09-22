@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Empire Tycoon v0.2</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0b1116;color:#f2f5f7;font-family:Arial,sans-serif}
+#app{max-width:1000px;margin:auto;min-height:100vh;background:#1a292f}
+.top{position:sticky;top:0;z-index:5;padding:15px;background:#0c1419;border-bottom:1px solid #394a52;display:flex;justify-content:space-between}
+.brand{font-size:22px;font-weight:bold}.money{font-size:20px;font-weight:bold;color:#f4c95d}
+main{padding:14px}.hero{height:200px;position:relative;overflow:hidden;border-radius:18px;border:1px solid #62737b;background:linear-gradient(#64879a 0 48%,#68735d 49% 70%,#303b40 71%)}
+.sun{position:absolute;right:40px;top:25px;width:55px;height:55px;border-radius:50%;background:#ffe7a0;box-shadow:0 0 35px #fff0a055}
+.hill{position:absolute;bottom:48px;left:-5%;width:110%;height:70px;background:#435248;border-radius:50% 50% 0 0}
+.road{position:absolute;bottom:0;width:100%;height:50px;background:#30383b}.road:after{content:"";position:absolute;top:23px;width:100%;height:4px;background:repeating-linear-gradient(90deg,#e8dc8b 0 38px,transparent 38px 72px)}
+.factory{position:absolute;bottom:38px;left:35px;width:165px;height:85px;background:linear-gradient(90deg,#596970,#9ca8aa);border:2px solid #35434a;box-shadow:8px 10px 18px #0007}
+.factory:before{content:"";position:absolute;left:-5px;top:-28px;border-left:85px solid transparent;border-right:85px solid transparent;border-bottom:28px solid #48565c}
+.factory:after{content:"";position:absolute;left:15px;top:27px;width:18px;height:20px;background:#c1eaf1;box-shadow:30px 0 #c1eaf1,60px 0 #c1eaf1,90px 0 #c1eaf1}
+.chimney{position:absolute;left:140px;bottom:115px;width:18px;height:65px;background:#5d6264;border:2px solid #394144}
+.smoke{position:absolute;left:135px;bottom:170px;width:70px;height:45px;background:radial-gradient(circle,#eee8 0 18%,transparent 55%);filter:blur(5px)}
+.heroText{position:absolute;top:14px;left:16px;font-weight:bold}.status{position:absolute;right:14px;bottom:12px;background:#10181dcc;padding:8px;border-radius:9px;font-weight:bold}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}.stat{padding:12px;text-align:center;border-radius:14px;background:linear-gradient(145deg,#3c5059,#293940);border:1px solid #596d76}.stat small{display:block;color:#bdc8cd}.stat b{font-size:20px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}button{border:0;border-radius:12px;padding:13px;font-weight:bold;cursor:pointer;background:linear-gradient(#80c8fa,#58a9df);color:#07141b}
+.title{font-size:18px;font-weight:bold;margin:16px 2px 9px}.map{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.plot{min-height:145px;padding:9px;border-radius:15px;border:2px solid #617984;background:linear-gradient(150deg,#4c636d,#31434b)}.locked{background:linear-gradient(150deg,#42555d,#303f46)}
+.mini{height:52px;width:78px;margin:3px auto 8px;position:relative;background:linear-gradient(90deg,#687b82,#aab4b6);border:2px solid #39484d}.mini:before{content:"";position:absolute;left:5px;top:-13px;border-left:34px solid transparent;border-right:34px solid transparent;border-bottom:13px solid #4a585d}.mini:after{content:"";position:absolute;left:8px;top:18px;width:10px;height:13px;background:#c8edf3;box-shadow:18px 0 #c8edf3,36px 0 #c8edf3}
+.plot h3{margin:0;font-size:15px}.plot p{margin:5px 0;font-size:12px}.level{color:#f4c95d}.plot button{width:100%;padding:9px;font-size:13px}
+.log{height:125px;overflow:auto;margin-top:12px;padding:10px;background:#0d171c;border:1px solid #304149;border-radius:14px;font-size:13px}
+@media(max-width:600px){.actions{grid-template-columns:1fr}.plot{min-height:145px}.plot h3{font-size:14px}}
+</style>
+</head>
+<body><div id="app">
+<header class="top"><div class="brand">🏭 Empire Tycoon</div><div class="money" id="money">₺71.000</div></header>
+<main>
+<section class="hero"><div class="sun"></div><div class="hill"></div><div class="road"></div><div class="smoke"></div><div class="chimney"></div><div class="factory"></div><div class="heroText">Sanayi bölgesi • Gün 1</div><div class="status">🏭 Fabrika çalışıyor</div></section>
+<section class="stats"><div class="stat"><small>📦 Ürün</small><b id="products">0</b></div><div class="stat"><small>🏭 Fabrika</small><b id="factories">1</b></div><div class="stat"><small>📈 Gelir</small><b id="income">500/10 sn</b></div></section>
+<section class="actions"><button onclick="sell()">📦 Ürünleri Sat (+₺500)</button><button onclick="upgrade()">⬆️ Fabrikayı Geliştir (₺25.000)</button></section>
+<div class="title">🏗️ Şehirdeki arsalar</div><section class="map" id="map"></section>
+<div class="title">📜 Şirket günlüğü</div><section class="log" id="log"></section>
+</main></div>
+<script>
+let money=71000,products=0,factories=1,level=1,income=500,plots=[true,false,false,false,false,false,false,false,false];
+const prices=[0,50000,100000,150000,200000,250000,300000,350000,400000];
+const $=id=>document.getElementById(id);
+function fmt(n){return "₺"+n.toLocaleString("tr-TR")}
+function log(t){$("log").insertAdjacentHTML("afterbegin","<div>• "+t+"</div>");if($("log").children.length>12)$("log").lastElementChild.remove()}
+function render(){ $("money").textContent=fmt(money);$("products").textContent=products;$("factories").textContent=factories;$("income").textContent=income+"/10 sn";let m=$("map");m.innerHTML="";plots.forEach((x,i)=>{let d=document.createElement("div");d.className="plot "+(x?"":"locked");if(x)d.innerHTML='<div class="mini"></div><h3>🏭 '+(i?"Fabrika "+(i+1):"Ana Fabrika")+'</h3><p><span class="level">Lv.'+level+'</span> • Üretim: '+Math.max(1,Math.floor(income/500))+'/10 sn</p><p>Arsa '+(i+1)+'</p>';else d.innerHTML='<h3>🔒 Boş Arsa</h3><p>Yeni yatırım alanı</p><p>Satın alma</p><button onclick="buyPlot('+i+')">'+fmt(prices[i])+'</button>';m.appendChild(d)})}
+function sell(){if(!products){log("Satılacak ürün yok.");return}products--;money+=500;log("1 ürün satıldı: +₺500");render()}
+function upgrade(){if(money<25000){log("Fabrika geliştirmek için yeterli para yok.");return}money-=25000;level++;income+=250;log("Fabrika geliştirildi. Gelir arttı.");render()}
+function buyPlot(i){if(money<prices[i]){log("Arsa için yeterli para yok.");return}money-=prices[i];plots[i]=true;factories++;income+=500;log("Yeni arsa satın alındı ve fabrika kuruldu.");render()}
+setInterval(()=>{products++;log("1 ürün üretildi.");render()},10000);render();log("Şirket kuruldu. Ana fabrika üretime başladı.");
+</script></body></html>
